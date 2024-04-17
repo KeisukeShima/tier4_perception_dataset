@@ -7,7 +7,8 @@ from typing import Any, Dict, List, Set, Union
 
 import numpy as np
 from pycocotools import mask as cocomask
-from tier4_perception_msgs.msg import TrafficLightArray, TrafficLightRoiArray
+from sensor_msgs.msg import CompressedImage
+from tier4_perception_msgs.msg import TrafficLightRoiArray, TrafficSignalArray
 import yaml
 
 from perception_dataset.rosbag2.autoware_msgs import parse_traffic_lights
@@ -50,7 +51,7 @@ class _Rosbag2ToAnnotatedT4TlrConverter(_Rosbag2ToT4Converter):
         self._traffic_light_rois_topic_name: str = params.traffic_light_rois_topic_name
         # traffic light lists
         self._traffic_light_roi_msgs: List[TrafficLightRoiArray] = []
-        self._traffic_light_label_msgs: List[TrafficLightArray] = []
+        self._traffic_light_label_msgs: List[TrafficSignalArray] = []
         # timestamps when there are traffic lights being detected
         self._non_empty_timestamps: Set[float] = set()
 
@@ -181,7 +182,7 @@ class _Rosbag2ToAnnotatedT4TlrConverter(_Rosbag2ToT4Converter):
         )
 
     def _process_traffic_lights(
-        self, message: Union[TrafficLightRoiArray, TrafficLightArray]
+        self, message: Union[TrafficLightRoiArray, TrafficSignalArray]
     ) -> List[Dict[str, Any]]:
         """
         Args:
@@ -200,7 +201,7 @@ class _Rosbag2ToAnnotatedT4TlrConverter(_Rosbag2ToT4Converter):
                     self._traffic_light_label_msgs.remove(label)
                     return res
             self._traffic_light_roi_msgs.append(message)
-        elif isinstance(message, TrafficLightArray):
+        elif isinstance(message, TrafficSignalArray):
             for roi in self._traffic_light_roi_msgs:
                 if (
                     roi.header.stamp.sec == message.header.stamp.sec
