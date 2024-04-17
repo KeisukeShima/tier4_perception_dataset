@@ -3,6 +3,10 @@ name = "perception-dataset"
 version = "1.0.7"
 description = "TIER IV Perception dataset has modules to convert dataset from rosbag to t4_dataset"
 authors = ["Yusuke Muramatsu <yusuke.muramatsu@tier4.jp>", "Shunsuke Miura <shunsuke.miura@tier4.jp>"]
+include = [
+    "perception_dataset",
+    "config",
+]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4"
